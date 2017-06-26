@@ -1,13 +1,13 @@
 USE [ZackMazaheriBattleships2017]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 6/23/2017 1:25:17 PM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 6/26/2017 1:57:07 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Users](
-	[Username] [nvarchar](10) NOT NULL,
-	[UserID] [int] NOT NULL,
+	[Username] [varchar](50) NOT NULL,
+	[UserID] [int] IDENTITY(1,1) NOT NULL,
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[UserID] ASC

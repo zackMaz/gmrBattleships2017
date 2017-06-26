@@ -1,20 +1,30 @@
 USE [ZackMazaheriBattleships2017]
 GO
-/****** Object:  Table [dbo].[Board]    Script Date: 6/23/2017 1:25:17 PM ******/
+/****** Object:  Table [dbo].[Board]    Script Date: 6/26/2017 1:57:07 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Board](
-	[X] [int] NOT NULL,
-	[Y] [int] NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[BoardID] [int] IDENTITY(1,1) NOT NULL,
 	[UserID] [int] NOT NULL,
- CONSTRAINT [PK_Board_1] PRIMARY KEY CLUSTERED 
+	[CellID] [int] NOT NULL,
+ CONSTRAINT [PK_Board] PRIMARY KEY CLUSTERED 
 (
-	[X] ASC,
-	[Y] ASC
+	[BoardID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Board]  WITH CHECK ADD  CONSTRAINT [FK_Board_Cells] FOREIGN KEY([CellID])
+REFERENCES [dbo].[Cells] ([CellID])
+GO
+ALTER TABLE [dbo].[Board] CHECK CONSTRAINT [FK_Board_Cells]
+GO
+ALTER TABLE [dbo].[Board]  WITH CHECK ADD  CONSTRAINT [FK_Board_Rooms] FOREIGN KEY([RoomID])
+REFERENCES [dbo].[Rooms] ([RoomID])
+GO
+ALTER TABLE [dbo].[Board] CHECK CONSTRAINT [FK_Board_Rooms]
 GO
 ALTER TABLE [dbo].[Board]  WITH CHECK ADD  CONSTRAINT [FK_Board_Users] FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
