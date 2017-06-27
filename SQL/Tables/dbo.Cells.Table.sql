@@ -1,18 +1,19 @@
 USE [ZackMazaheriBattleships2017]
 GO
-/****** Object:  Table [dbo].[Cells]    Script Date: 6/26/2017 2:58:23 PM ******/
+/****** Object:  Table [dbo].[Cells]    Script Date: 6/27/2017 1:28:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Cells](
-	[CellID] [int] NOT NULL,
+	[CellID] [int] IDENTITY(1,1) NOT NULL,
 	[X] [int] NOT NULL,
 	[Y] [int] NOT NULL,
 	[StatusID] [int] NOT NULL,
 	[BoardID] [int] NOT NULL,
-	[RoomID] [int] NULL,
-	[UserID] [int] NULL,
+	[RoomID] [int] NOT NULL,
+	[UserID] [int] NOT NULL,
+	[ShipID] [int] NULL,
  CONSTRAINT [PK_Cells] PRIMARY KEY CLUSTERED 
 (
 	[CellID] ASC
@@ -28,6 +29,11 @@ ALTER TABLE [dbo].[Cells]  WITH CHECK ADD  CONSTRAINT [FK_Cells_Rooms] FOREIGN K
 REFERENCES [dbo].[Rooms] ([RoomID])
 GO
 ALTER TABLE [dbo].[Cells] CHECK CONSTRAINT [FK_Cells_Rooms]
+GO
+ALTER TABLE [dbo].[Cells]  WITH CHECK ADD  CONSTRAINT [FK_Cells_ShipTypes] FOREIGN KEY([ShipID])
+REFERENCES [dbo].[ShipTypes] ([ShipID])
+GO
+ALTER TABLE [dbo].[Cells] CHECK CONSTRAINT [FK_Cells_ShipTypes]
 GO
 ALTER TABLE [dbo].[Cells]  WITH CHECK ADD  CONSTRAINT [FK_Cells_Statuses] FOREIGN KEY([StatusID])
 REFERENCES [dbo].[Statuses] ([StatusID])
