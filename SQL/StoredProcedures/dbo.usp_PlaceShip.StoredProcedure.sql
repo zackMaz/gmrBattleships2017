@@ -1,6 +1,6 @@
 USE [ZackMazaheriBattleships2017]
 GO
-/****** Object:  StoredProcedure [dbo].[usp_PlaceShip]    Script Date: 6/27/2017 1:28:31 PM ******/
+/****** Object:  StoredProcedure [dbo].[usp_PlaceShip]    Script Date: 6/28/2017 2:49:00 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10,98 +10,121 @@ CREATE PROC [dbo].[usp_PlaceShip]
 @directionID int,
 @shipID int
 AS
-IF NOT EXISTS (SELECT StatusID FROM Cells WHERE  @cellID = CellID AND StatusID = 1)
-BEGIN
-	UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @cellID = CellID
-	DECLARE @shipSizeCounter int = 1
-	DECLARE @shipSize int = (SELECT ShipSize FROM ShipTypes WHERE @shipID = ShipID)
-	DECLARE @startingX int = (SELECT X FROM Cells WHERE @cellID = CellID)
-	DECLARE @startingY int = (SELECT Y FROm Cells WHERE @cellID = CellID)
-	DECLARE @counter int = 1
-	WHILE (@shipSizeCounter < @shipSize)
-		BEGIN
+IF NOT EXISTS (SELECT StatusID FROM Cells WHERE @cellID = CellID AND StatusID = 1)
+	BEGIN
+		DECLARE @shipSizeCounter int = 1
+		DECLARE @testCounter int = 1
+		DECLARE @shipSize int = (SELECT ShipSize FROM Ships WHERE @shipID = ShipID)
+		DECLARE @startingX int = (SELECT X FROM Cells WHERE @cellID = CellID)
+		DECLARE @startingY int = (SELECT Y FROM Cells WHERE @cellID = CellID)
 
-			IF (@directionID = 0)
-				BEGIN
-					IF EXISTS (SELECT * FROM Cells WHERE Y = (@startingY + (@shipSize-1)))
-						BEGIN
-							IF NOT EXISTS (SELECT StatusID FROM Cells WHERE @startingX = X AND @startingY + @counter = Y AND StatusID = 1)
-								BEGIN
-									UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX = X AND @startingY + @counter = Y
-									SET @counter = @counter + 1
-								END
-							ELSE
-								BEGIN
-									PRINT 'intersected'
-								END
-						END
-					ELSE
-						BEGIN
-							PRINT 'size out of bounds'
-						END
-				END
-			IF (@directionID = 1)
-				BEGIN
-					IF EXISTS (SELECT * FROM Cells WHERE X = (@startingX + (@shipSize-1)))
-						BEGIN
-							IF NOT EXISTS (SELECT StatusID FROM Cells WHERE @startingX + @counter = X AND @startingY = Y AND StatusID = 1)
-								BEGIN
-									UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX + @counter = X AND @startingY = Y
-									SET @counter = @counter + 1
-								END
-							ELSE
-								BEGIN
-									PRINT 'intersected'
-								END
-						END
-					ELSE
-						BEGIN
-							PRINT 'size out of bounds'
-						END
-				END
-			IF (@directionID = 2)
-				BEGIN
-					IF EXISTS (SELECT * FROM Cells WHERE Y = (@startingY - (@shipSize-1)))
-						BEGIN
-							IF NOT EXISTS (SELECT StatusID FROM Cells WHERE @startingX = X AND @startingY - @counter = Y AND StatusID = 1)
-								BEGIN
-									UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX = X AND @startingY - @counter = Y
-									SET @counter = @counter + 1
-								END
-							ELSE
-								BEGIN
-									PRINT 'intersected'
-								END
-						END
-					ELSE
-						BEGIN
-							PRINT 'size out of bounds'
-						END
-				END
-			IF (@directionID = 3)
-				BEGIN
-					IF EXISTS (SELECT * FROM Cells WHERE X = (@startingX - (@shipSize-1)))
-						BEGIN
-							IF NOT EXISTS (SELECT StatusID FROM Cells WHERE @startingX - @counter = X AND @startingY = Y AND StatusID = 1)
-								BEGIN
-									UPDATE Cells SET StatusID = 1 , ShipID = @shipID WHERE @startingX - @counter = X AND @startingY = Y
-									SET @counter = @counter + 1
-								END
-							ELSE
-								BEGIN
-									PRINT 'intersected'
-								END
-						END
-					ELSE
-						BEGIN
-							PRINT 'size out of bounds'
-						END
-				END
+		WHILE (@shipSizeCounter < @shipSize)
+			BEGIN
+				
+				IF (@directionID = 0)
+					BEGIN
+						IF NOT EXISTS (SELECT * FROM Cells WHERE Y = (@startingY + (@shipSize-1)))
+							OR EXISTS (SELECT StatusID FROM Cells WHERE @startingX = X 
+								AND @startingY + @testCounter = Y AND StatusID = 1)
+							BEGIN
+								PRINT 'INVALID'
+								RETURN
+							END
+						ELSE
+							BEGIN
+								PRINT 'VALID'
+								SET @testCounter = @testCounter + 1
+							END
+					END
+				IF (@directionID = 1)
+					BEGIN
+						IF NOT EXISTS (SELECT * FROM Cells WHERE X = (@startingX + (@shipSize-1)))
+							OR EXISTS (SELECT StatusID FROM Cells WHERE @startingX + @testCounter = X 
+								AND @startingY = Y AND StatusID = 1)
+							BEGIN
+								PRINT 'INVALID'
+								RETURN
+							END
+						ELSE
+							BEGIN
+								PRINT 'VALID'
+								SET @testCounter = @testCounter + 1
+							END
+					END
+				IF (@directionID = 2)
+					BEGIN
+						IF NOT EXISTS (SELECT * FROM Cells WHERE Y = (@startingY - (@shipSize-1)))
+							OR EXISTS (SELECT StatusID FROM Cells WHERE @startingX = X 
+								AND @startingY - @testCounter = Y AND StatusID = 1)
+							BEGIN
+								PRINT 'INVALID'
+								RETURN
+							END
+						ELSE
+							BEGIN
+								PRINT 'VALID'
+								SET @testCounter = @testCounter + 1
+							END
+					END
+				IF (@directionID = 3)
+					BEGIN
+						IF NOT EXISTS (SELECT * FROM Cells WHERE X = (@startingX - (@shipSize-1)))
+							OR EXISTS (SELECT StatusID FROM Cells WHERE @startingX - @testCounter = X 
+								AND @startingY = Y AND StatusID = 1)
+							BEGIN
+								PRINT 'INVALID'
+								RETURN
+							END
+						ELSE
+							BEGIN
+								PRINT 'VALID'
+								SET @testCounter = @testCounter + 1
+							END
+					END
+
+
 			SET @shipSizeCounter = @shipSizeCounter + 1
-		END
-END
+
+			END
+
+
+		SET @shipSizeCounter = 1
+		SET @testCounter = 1
+
+		UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX = X AND @startingY = Y
+		UPDATE Ships SET isPlaced = 1 WHERE @shipID = ShipID
+		WHILE (@shipSizeCounter < @shipSize)
+			BEGIN
+				IF (@directionID = 0)
+					BEGIN
+						UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX = X AND @startingY + @testCounter = Y
+						SET @testCounter = @testCounter + 1
+					END
+				IF (@directionID = 1)
+					BEGIN
+						UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX + @testCounter = X AND @startingY = Y
+						SET @testCounter = @testCounter + 1
+					END
+				IF (@directionID = 2)
+					BEGIN
+						UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX = X AND @startingY - @testCounter = Y
+						SET @testCounter = @testCounter + 1
+					END
+				IF (@directionID = 3)
+					BEGIN
+						UPDATE Cells SET StatusID = 1, ShipID = @shipID WHERE @startingX - @testCounter = X AND @startingY = Y
+						SET @testCounter = @testCounter + 1
+					END
+
+				SET @shipSizeCounter = @shipSizeCounter + 1
+			END
+
+	END
+
+
+
 ELSE
-BEGIN
-	PRINT 'First Hit Wrong'
-END
+	BEGIN
+		PRINT 'taken place'
+	END
 GO

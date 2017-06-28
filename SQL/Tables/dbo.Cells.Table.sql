@@ -1,6 +1,6 @@
 USE [ZackMazaheriBattleships2017]
 GO
-/****** Object:  Table [dbo].[Cells]    Script Date: 6/27/2017 1:28:31 PM ******/
+/****** Object:  Table [dbo].[Cells]    Script Date: 6/28/2017 2:49:00 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31,7 +31,7 @@ GO
 ALTER TABLE [dbo].[Cells] CHECK CONSTRAINT [FK_Cells_Rooms]
 GO
 ALTER TABLE [dbo].[Cells]  WITH CHECK ADD  CONSTRAINT [FK_Cells_ShipTypes] FOREIGN KEY([ShipID])
-REFERENCES [dbo].[ShipTypes] ([ShipID])
+REFERENCES [dbo].[Ships] ([ShipID])
 GO
 ALTER TABLE [dbo].[Cells] CHECK CONSTRAINT [FK_Cells_ShipTypes]
 GO
