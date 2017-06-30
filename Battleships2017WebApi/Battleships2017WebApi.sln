@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleships2017WebApi", "Battleships2017WebApi\Battleships2017WebApi.csproj", "{D31A1AA7-24A4-489A-8729-B97F8C602AC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleships2017WebApi.Tests", "Battleships2017WebApi.Tests\Battleships2017WebApi.Tests.csproj", "{A47158F1-58D0-42B5-86DC-A94ED56A9B3B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D31A1AA7-24A4-489A-8729-B97F8C602AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31A1AA7-24A4-489A-8729-B97F8C602AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31A1AA7-24A4-489A-8729-B97F8C602AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31A1AA7-24A4-489A-8729-B97F8C602AC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A47158F1-58D0-42B5-86DC-A94ED56A9B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A47158F1-58D0-42B5-86DC-A94ED56A9B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A47158F1-58D0-42B5-86DC-A94ED56A9B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A47158F1-58D0-42B5-86DC-A94ED56A9B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
